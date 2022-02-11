@@ -7,6 +7,7 @@ public class cellAttributs : MonoBehaviour
     public bool alive = false;
     public Material materialAlive;
     public Material materialDead;
+    public int nbr_voisin = 0;
     // Start is called before the first frame update
     void Start()
     {

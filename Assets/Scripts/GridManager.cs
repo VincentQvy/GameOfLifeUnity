@@ -138,7 +138,6 @@ public class GridManager : MonoBehaviour
             if (checkStart)
             {
                 playLoop = !playLoop;
-                print("oui");
             }
             if (playLoop && _timer <= 0)
             {

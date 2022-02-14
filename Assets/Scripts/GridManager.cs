@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     private bool[,] toChange;
     public int hauteur = 5;
     public int largeur = 5;
+    private bool checkStart = false;
     private int ajout = 0;
     public float timer = 1.0f;
     private float _timer;
@@ -109,22 +110,24 @@ public class GridManager : MonoBehaviour
     void Update()
     {
         Vector3 worldPosition;
-        if (Input.GetMouseButtonDown(0))
-        {
-            worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            int x = (int)Mathf.Floor(worldPosition.x + 0.5f);
-            int y = (int)Mathf.Floor(worldPosition.y + 0.5f);
-            _grid[x, y].GetComponent<cellAttributs>().alive = !_grid[x, y].GetComponent<cellAttributs>().alive;
+        if(checkStart == true) { 
+            if (Input.GetMouseButtonDown(0))
+            {
+                worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                int x = (int)Mathf.Floor(worldPosition.x + 0.5f);
+                int y = (int)Mathf.Floor(worldPosition.y + 0.5f);
+                _grid[x, y].GetComponent<cellAttributs>().alive = !_grid[x, y].GetComponent<cellAttributs>().alive;
+            }
+            if (Input.GetKeyDown(KeyCode.K)) 
+            {
+                playLoop = !playLoop;
+            }
+            if (playLoop && _timer <= 0)
+            {
+                PlayLoop();
+                _timer = timer;
+            }
+            _timer -= Time.deltaTime;
         }
-        if (Input.GetKeyDown(KeyCode.K)) 
-        {
-            playLoop = !playLoop;
-        }
-        if (playLoop && _timer <= 0)
-        {
-            PlayLoop();
-            _timer = timer;
-        }
-        _timer -= Time.deltaTime;
     }
 }

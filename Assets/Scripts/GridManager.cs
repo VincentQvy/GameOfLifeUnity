@@ -11,14 +11,30 @@ public class GridManager : MonoBehaviour
     private bool[,] toChange;
     public int hauteur = 5;
     public int largeur = 5;
-    private bool checkStart = false;
-    private int ajout = 0;
+    public bool checkStart = false;
+    public bool checkGen = false;
     public float timer = 1.0f;
     private float _timer;
     private bool playLoop = false;
     void Start()
     {
         _timer = timer;
+    }
+    public void PlayStart()
+    {
+        checkStart = !checkStart;
+    }
+    void posCam()
+    {
+        Camera.main.orthographicSize = hauteur / 2;
+        Vector3 position = new Vector3(-1, hauteur / 2 - 0.5f, -10);
+        Camera.main.transform.position = position;
+    }
+
+    public void GenMap()
+    {
+        posCam();
+        checkGen = true;
         _grid = new GameObject[hauteur, largeur];
         for (int y = 0; y < hauteur; y++)
         {
@@ -110,7 +126,8 @@ public class GridManager : MonoBehaviour
     void Update()
     {
         Vector3 worldPosition;
-        if(checkStart == true) { 
+        if (checkGen)
+        {
             if (Input.GetMouseButtonDown(0))
             {
                 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -118,9 +135,10 @@ public class GridManager : MonoBehaviour
                 int y = (int)Mathf.Floor(worldPosition.y + 0.5f);
                 _grid[x, y].GetComponent<cellAttributs>().alive = !_grid[x, y].GetComponent<cellAttributs>().alive;
             }
-            if (Input.GetKeyDown(KeyCode.K)) 
+            if (checkStart)
             {
                 playLoop = !playLoop;
+                print("oui");
             }
             if (playLoop && _timer <= 0)
             {
@@ -131,3 +149,5 @@ public class GridManager : MonoBehaviour
         }
     }
 }
+
+

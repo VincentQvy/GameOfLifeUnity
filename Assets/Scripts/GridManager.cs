@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
     public GameObject Cell;
     public Material alive;
     public Material Dead;
+    public GameObject CellContainer;
     private GameObject[,] _grid;
     private bool[,] toChange;
     public int hauteur = 5;
@@ -24,10 +26,33 @@ public class GridManager : MonoBehaviour
     {
         checkStart = !checkStart;
     }
+
+    public void ChangeHeight()
+    {
+        hauteur = (int)GameObject.Find("Slider Hauteur").GetComponent<Slider>().value;
+    }
+    public void ChangeWidth()
+    {
+        largeur = (int)GameObject.Find("Slider Largeur").GetComponent<Slider>().value;
+    }
+    public void ChangeSpeed()
+    {
+        timer = GameObject.Find("Slider Vitesse").GetComponent<Slider>().value;
+    }
+
     void posCam()
     {
-        Camera.main.orthographicSize = hauteur / 2;
-        Vector3 position = new Vector3(-1, hauteur / 2 - 0.5f, -10);
+        int cameraSize = 0;
+        if (hauteur < largeur)
+        {
+            cameraSize = largeur;
+        }
+        else
+        {
+            cameraSize = hauteur;
+        }
+        Camera.main.orthographicSize = cameraSize / 2;
+        Vector3 position = new Vector3(0, hauteur / 2 - 0.5f, -10);
         Camera.main.transform.position = position;
     }
 
@@ -35,6 +60,10 @@ public class GridManager : MonoBehaviour
     {
         posCam();
         checkGen = true;
+        foreach (Transform Cell in CellContainer.transform)
+        {
+            Destroy(Cell.gameObject);
+        }
         _grid = new GameObject[hauteur, largeur];
         for (int y = 0; y < hauteur; y++)
         {
@@ -42,7 +71,8 @@ public class GridManager : MonoBehaviour
             {
                 GameObject clone = Instantiate(Cell, new Vector3(x, y, 0), Quaternion.identity);
                 clone.name = (x.ToString() + "," + y.ToString());
-                _grid[x, y] = clone;
+                clone.transform.SetParent(CellContainer.transform);
+                _grid[y, x] = clone;
             }
         }
     }
@@ -84,32 +114,32 @@ public class GridManager : MonoBehaviour
         {
             for (int x = 0; x < largeur; x++)
             {
-                toChange[x, y] = _grid[x, y].GetComponent<cellAttributs>().alive;
+                toChange[y, x] = _grid[y,x].GetComponent<cellAttributs>().alive;
                 switch (checkNeighbour(x, y))
                 {
                     case 0:
-                        toChange[x, y] = false;
+                        toChange[y, x] = false;
                         break;
                     case 1:
-                        toChange[x, y] = false;
+                        toChange[y, x] = false;
                         break;
                     case 3:
-                        toChange[x, y] = true;
+                        toChange[y, x] = true;
                         break;
                     case 4:
-                        toChange[x, y] = false;
+                        toChange[y, x] = false;
                         break;
                     case 5:
-                        toChange[x, y] = false;
+                        toChange[y, x] = false;
                         break;
                     case 6:
-                        toChange[x, y] = false;
+                        toChange[y, x] = false;
                         break;
                     case 7:
-                        toChange[x, y] = false;
+                        toChange[y, x] = false;
                         break;
                     case 8:
-                        toChange[x, y] = false;
+                        toChange[y, x] = false;
                         break;
                 }
             }
@@ -118,7 +148,7 @@ public class GridManager : MonoBehaviour
         {
             for (int x = 0; x < largeur; x++)
             {
-                _grid[x, y].GetComponent<cellAttributs>().alive = toChange[x, y];
+                _grid[y,x].GetComponent<cellAttributs>().alive = toChange[y, x];
             }
         }
     }
@@ -133,7 +163,7 @@ public class GridManager : MonoBehaviour
                 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)Mathf.Floor(worldPosition.x + 0.5f);
                 int y = (int)Mathf.Floor(worldPosition.y + 0.5f);
-                _grid[x, y].GetComponent<cellAttributs>().alive = !_grid[x, y].GetComponent<cellAttributs>().alive;
+                _grid[y, x].GetComponent<cellAttributs>().alive = !_grid[y, x].GetComponent<cellAttributs>().alive;
             }
             if (checkStart)
             {

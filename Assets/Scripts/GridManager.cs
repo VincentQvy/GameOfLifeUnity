@@ -98,10 +98,6 @@ public class GridManager : MonoBehaviour
                 if (y == 0)
                 {
                     newY = hauteur - 1;
-                    if (x!=0)
-                    {
-                        newX = x - 1;
-                    }
                 }
                 if (x == largeur - 1)
                 {
@@ -109,8 +105,6 @@ public class GridManager : MonoBehaviour
                 }
                 comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
             }
-            else
-                comptage += _grid[y - 1, x + 1].GetComponent<cellAttributs>().alive ? 1 : 0;
 
             // droite
             if (x < largeur - 1)
@@ -125,11 +119,7 @@ public class GridManager : MonoBehaviour
                 newY = y + 1;
                 if (y == hauteur - 1)
                 {
-                    newY = y - 1;
-                    if (x != largeur -1)
-                    {
-                        newX = x+1;
-                    }
+                    newY = 0;
                 }
                 if (x == largeur - 1)
                 {
@@ -137,15 +127,14 @@ public class GridManager : MonoBehaviour
                 }
                 comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
             }
-            else
-                comptage += _grid[y + 1, x + 1].GetComponent<cellAttributs>().alive ? 1 : 0;
-                
-
+            
             //bas
             if (y > 0)
                 comptage += _grid[y - 1, x].GetComponent<cellAttributs>().alive ? 1 : 0;
             else
+            {
                 comptage += _grid[hauteur - y - 1, x].GetComponent<cellAttributs>().alive ? 1 : 0;
+            }
 
             //haut
             if (y < hauteur - 1)
@@ -168,9 +157,7 @@ public class GridManager : MonoBehaviour
                 }
                 comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
             }
-            else
-                comptage += _grid[y - 1, x - 1].GetComponent<cellAttributs>().alive ? 1 : 0;
-                
+                           
 
             //gauche
             if (x > 0)
@@ -185,16 +172,14 @@ public class GridManager : MonoBehaviour
                 newY = y + 1;
                 if (y == hauteur - 1)
                 {
-                    newY = y - 1;
+                    newY = 0;
                 }
                 if (x == 0)
                 {
-                    newX = largeur - 1;
+                    newX = hauteur - 1;
                 }
                 comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
             }
-            else
-                comptage += _grid[y + 1, x - 1].GetComponent<cellAttributs>().alive ? 1 : 0;
         }
         return comptage;
     }

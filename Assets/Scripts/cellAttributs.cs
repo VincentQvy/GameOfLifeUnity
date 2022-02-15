@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cellAttributs : MonoBehaviour
+public class CellAttributs : MonoBehaviour
 {
     public bool alive = false;
     public Material materialAlive;

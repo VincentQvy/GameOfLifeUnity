@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class SaveObject
 {
-    public string playerName;
-    public int playerLevel;
-    public int playerGold;
-    public int playerLives;
+    public int Hauteur;
+    public int Largeur;
+    public float Vitesse;
+    public int Bordure;
+    public List<int> Grid;
 
 }

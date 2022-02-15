@@ -9,19 +9,34 @@ public class GridManager : MonoBehaviour
     public Material alive;
     public Material Dead;
     public GameObject CellContainer;
-    private GameObject[,] _grid;
+    public GameObject[,] _grid;
     private bool[,] toChange;
     public int hauteur = 5;
     public int largeur = 5;
-    int rule = 0;
+    public int rule = 0;
     public bool checkStart = false;
     public bool checkGen = false;
     public float timer = 1.0f;
     private float _timer;
     private bool playLoop = false;
+    public static GridManager instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         _timer = timer;
+
     }
     public void PlayStart()
     {
@@ -139,14 +154,14 @@ public class GridManager : MonoBehaviour
                 {
                     newX = 0;
                 }
-                comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[newY, newX].GetComponent<CellAttributs>().alive ? 1 : 0;
             }
 
             // droite
             if (x < largeur - 1)
-                comptage += _grid[y, x + 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y, x + 1].GetComponent<CellAttributs>().alive ? 1 : 0;
             else
-                comptage += _grid[y, largeur - x - 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y, largeur - x - 1].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             //haut droite
             if (x <= largeur - 1)
@@ -161,22 +176,22 @@ public class GridManager : MonoBehaviour
                 {
                     newX = 0;
                 }
-                comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[newY, newX].GetComponent<CellAttributs>().alive ? 1 : 0;
             }
             
             //bas
             if (y > 0)
-                comptage += _grid[y - 1, x].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y - 1, x].GetComponent<CellAttributs>().alive ? 1 : 0;
             else
             {
-                comptage += _grid[hauteur - y - 1, x].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[hauteur - y - 1, x].GetComponent<CellAttributs>().alive ? 1 : 0;
             }
 
             //haut
             if (y < hauteur - 1)
-                comptage += _grid[y + 1, x].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y + 1, x].GetComponent<CellAttributs>().alive ? 1 : 0;
             else
-                comptage += _grid[hauteur - y - 1, x].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[hauteur - y - 1, x].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             //bas gauche
             if (x >= 0)
@@ -191,15 +206,15 @@ public class GridManager : MonoBehaviour
                 {
                     newX = largeur - 1;
                 }
-                comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[newY, newX].GetComponent<CellAttributs>().alive ? 1 : 0;
             }
                            
 
             //gauche
             if (x > 0)
-                comptage += _grid[y, x - 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y, x - 1].GetComponent<CellAttributs>().alive ? 1 : 0;
             else
-                comptage += _grid[y, largeur - x - 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y, largeur - x - 1].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             //haut gauche
             if (x >= 0)
@@ -214,38 +229,38 @@ public class GridManager : MonoBehaviour
                 {
                     newX = largeur - 1;
                 }
-                comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[newY, newX].GetComponent<CellAttributs>().alive ? 1 : 0;
             }
         }
         else
         {
             if (y == hauteur + 19 || x == largeur + 19 || x == 0 || y == 0)
             {
-                _grid[y , x ].GetComponent<cellAttributs>().alive = false;
+                _grid[y , x ].GetComponent<CellAttributs>().alive = false;
             }
             if (y - 1 >= 0 && x + 1 < largeur + 19)
-                comptage += _grid[y - 1, x + 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y - 1, x + 1].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             if (x + 1 < largeur + 19)
-                comptage += _grid[y, x + 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y, x + 1].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             if (x + 1 < largeur + 19 && y + 1 < hauteur + 19)
-                comptage += _grid[y + 1, x + 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y + 1, x + 1].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             if (y - 1 >= 0)
-                comptage += _grid[y - 1, x].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y - 1, x].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             if (y + 1 < hauteur + 19)
-                comptage += _grid[y + 1, x].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y + 1, x].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             if (x - 1 >= 0 && y - 1 >= 0)
-                comptage += _grid[y - 1, x - 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y - 1, x - 1].GetComponent<CellAttributs>().alive ? 1 : 0;
             
             if (x - 1 >= 0)
-                comptage += _grid[y, x - 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y, x - 1].GetComponent<CellAttributs>().alive ? 1 : 0;
 
             if (y + 1 < hauteur + 19 && x - 1 >= 0)
-                comptage += _grid[y + 1, x - 1].GetComponent<cellAttributs>().alive ? 1 : 0;
+                comptage += _grid[y + 1, x - 1].GetComponent<CellAttributs>().alive ? 1 : 0;
 
         }
         return comptage;
@@ -258,7 +273,7 @@ public class GridManager : MonoBehaviour
             {
                 for (int x = 0; x < largeur; x++)
                 {
-                    toChange[y, x] = _grid[y, x].GetComponent<cellAttributs>().alive;
+                    toChange[y, x] = _grid[y, x].GetComponent<CellAttributs>().alive;
                     switch (checkNeighbour(x, y))
                     {
                         case 0:
@@ -292,7 +307,7 @@ public class GridManager : MonoBehaviour
             {
                 for (int x = 0; x < largeur; x++)
                 {
-                    _grid[y, x].GetComponent<cellAttributs>().alive = toChange[y, x];
+                    _grid[y, x].GetComponent<CellAttributs>().alive = toChange[y, x];
                 }
             }
         }
@@ -303,7 +318,7 @@ public class GridManager : MonoBehaviour
             {
                 for (int x = 0; x < largeur+20; x++)
                 {
-                    toChange[y, x] = _grid[y, x].GetComponent<cellAttributs>().alive;
+                    toChange[y, x] = _grid[y, x].GetComponent<CellAttributs>().alive;
                     switch (checkNeighbour(x, y))
                     {
                         case 0:
@@ -337,7 +352,7 @@ public class GridManager : MonoBehaviour
             {
                 for (int x = 0; x < largeur+20; x++)
                 {
-                    _grid[y, x].GetComponent<cellAttributs>().alive = toChange[y, x];
+                    _grid[y, x].GetComponent<CellAttributs>().alive = toChange[y, x];
                 }
             }
         }
@@ -345,6 +360,7 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
+
         Vector3 worldPosition;
         if (checkGen)
         {
@@ -353,7 +369,7 @@ public class GridManager : MonoBehaviour
                 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)Mathf.Floor(worldPosition.x + 0.5f);
                 int y = (int)Mathf.Floor(worldPosition.y + 0.5f);
-                _grid[y, x].GetComponent<cellAttributs>().alive = !_grid[y, x].GetComponent<cellAttributs>().alive;
+                _grid[y, x].GetComponent<CellAttributs>().alive = !_grid[y, x].GetComponent<CellAttributs>().alive;
             }
             if (checkStart)
             {

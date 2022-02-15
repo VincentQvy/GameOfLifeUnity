@@ -176,7 +176,7 @@ public class GridManager : MonoBehaviour
                 }
                 if (x == 0)
                 {
-                    newX = hauteur - 1;
+                    newX = largeur - 1;
                 }
                 comptage += _grid[newY, newX].GetComponent<cellAttributs>().alive ? 1 : 0;
             }

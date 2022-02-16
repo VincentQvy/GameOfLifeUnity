@@ -49,12 +49,15 @@ public class SaveTest : MonoBehaviour
     }
     private SaveObject LoadDataObject()
     {
+        
         if(so.Bordure == 0) { 
             so = SaveJson.Load(this);
             foreach (Transform Cell in CellContainer.transform)
             {
                 Destroy(Cell.gameObject);
+
             }
+            GridManager.instance._grid = new GameObject[so.Hauteur+20, so.Largeur + 20];
             for (int i=0; i<so.Hauteur + 20; i++)
             {
                 for (int o = 0; o < so.Largeur + 20; o++)
@@ -87,6 +90,7 @@ public class SaveTest : MonoBehaviour
             {
                 Destroy(Cell.gameObject);
             }
+            GridManager.instance._grid = new GameObject[so.Hauteur , so.Largeur ];
             for (int i = 0; i < so.Hauteur; i++)
             {
                 for (int o = 0; o < so.Largeur; o++)

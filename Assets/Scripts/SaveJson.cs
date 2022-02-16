@@ -30,7 +30,7 @@ public static class SaveJson
         {
             string json = File.ReadAllText(dir);
             so = JsonUtility.FromJson<SaveObject>(json);
-            saveTest.so = so;
+            
         }
         else
         {

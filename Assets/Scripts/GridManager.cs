@@ -36,6 +36,7 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         _timer = timer;
+        GenMap();
 
     }
     public void PlayStart()

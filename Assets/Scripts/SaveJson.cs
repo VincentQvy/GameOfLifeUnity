@@ -1,13 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using System.IO;
 
 public static class SaveJson
 {
     public static string directory = "TestDataSave";
-    public static string fileName = "Partie.txt";
+    public static string fileName = "save.txt";
+    static bool canLoad = true;
     // Start is called before the first frame update
+
+    public static void saveName(string savename)
+    {
+        canLoad = true;
+        if (savename.Length == 1)
+        {
+            canLoad = false;
+        }
+        fileName = savename + ".txt";
+    }
 
     public static void Save(SaveObject so)
     {
@@ -25,18 +38,21 @@ public static class SaveJson
     {
         string dir = Path.Combine(Application.persistentDataPath, directory, fileName);
         SaveObject so = new SaveObject();
-
-        if (File.Exists(dir))
+        if (canLoad)
         {
-            string json = File.ReadAllText(dir);
-            so = JsonUtility.FromJson<SaveObject>(json);
-            
-        }
-        else
-        {
-            Debug.Log("Save file does note exist");
-        }
 
+            if (File.Exists(dir))
+            {
+                string json = File.ReadAllText(dir);
+                so = JsonUtility.FromJson<SaveObject>(json);
+
+            }
+            else
+            {
+                Debug.Log("Save file does not exist");
+            }
+
+        }
         return so;
     }
 }

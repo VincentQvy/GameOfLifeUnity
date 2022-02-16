@@ -62,7 +62,7 @@ public class GridManager : MonoBehaviour
         timer = GameObject.Find("Slider Vitesse").GetComponent<Slider>().value;
     }
 
-    void posCam()
+    public void posCam(int largeur, int hauteur)
     {
         if (rule == 1)
         {
@@ -98,7 +98,7 @@ public class GridManager : MonoBehaviour
 
     public void GenMap()
     {
-        posCam();
+        posCam(largeur,hauteur);
         checkGen = true;
         foreach (Transform Cell in CellContainer.transform)
         {

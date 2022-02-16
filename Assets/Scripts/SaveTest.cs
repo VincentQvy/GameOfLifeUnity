@@ -1,28 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class SaveTest : MonoBehaviour
 {
     public SaveObject so;
     public GameObject Cell;
     public GameObject CellContainer;
+    public Slider Height;
+    public Slider Width;
+    public Slider Speed;
+    public Slider Boucle;
+    public TextMeshProUGUI savename;
 
-    void Update()
+    public void SaveButton()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var so = CreateDataObject();
-            SaveJson.Save(so);
-            print("Save");
-        }
+        var so = CreateDataObject();
+        SaveJson.Save(so);
+        print("Save");
+    }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+    public void LoadButton()
+    {
+        so = SaveJson.Load(this);
+        Debug.Log(so);
+        if (so!= null)
         {
-            so = SaveJson.Load(this);
             LoadDataObject();
             print("Load");
         }
+    }
+
+    public void changeSaveName()
+    {
+        SaveJson.saveName(savename.text);
     }
 
     private SaveObject CreateDataObject()
@@ -49,8 +62,17 @@ public class SaveTest : MonoBehaviour
     }
     private SaveObject LoadDataObject()
     {
-        
-        if(so.Bordure == 0) { 
+        GridManager.instance.hauteur = so.Hauteur;
+        GridManager.instance.largeur = so.Largeur;
+        GridManager.instance.timer = so.Vitesse;
+        GridManager.instance.rule = so.Bordure;
+
+        Height.value = so.Hauteur;
+        Width.value = so.Largeur;
+        Speed.value = so.Vitesse;
+        Boucle.value = so.Bordure;
+
+        if (so.Bordure == 0) { 
             so = SaveJson.Load(this);
             foreach (Transform Cell in CellContainer.transform)
             {
@@ -114,6 +136,7 @@ public class SaveTest : MonoBehaviour
 
             }
         }
+        GridManager.instance.posCam(so.Largeur, so.Hauteur);
         return so;
     }
 }

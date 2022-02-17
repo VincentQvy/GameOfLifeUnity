@@ -1985,11 +1985,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   so:
-    Hauteur: 20
-    Largeur: 20
-    Vitesse: 1
-    Bordure: 0
-    Grid: 
+    m_hauteur: 0
+    m_largeur: 0
+    m_vitesse: 0
+    m_bordure: 0
+    m_grid: 
   Cell: {fileID: 1741200887301174934, guid: 250eae3d5dcac3d4f9191fa2ba7aa6d4, type: 3}
   CellContainer: {fileID: 1293007402}
   Height: {fileID: 712202511}
@@ -2792,8 +2792,8 @@ MonoBehaviour:
   alive: {fileID: 2100000, guid: cec8d9a91ece7234b8cd73cc1faacf24, type: 2}
   Dead: {fileID: 2100000, guid: 690af9161aaed3b41b24cad38be0b33b, type: 2}
   CellContainer: {fileID: 1293007402}
-  hauteur: 20
-  largeur: 20
+  height: 20
+  width: 20
   rule: 0
   offset: 0
   checkStart: 0
@@ -3767,7 +3767,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 723111090}
         m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
-        m_MethodName: borderRule
+        m_MethodName: BorderRule
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

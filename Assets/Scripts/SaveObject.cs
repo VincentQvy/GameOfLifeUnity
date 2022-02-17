@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class SaveObject
 {
-    public int Hauteur;
-    public int Largeur;
-    public float Vitesse;
-    public int Bordure;
-    public List<int> Grid;
+    public int m_hauteur;
+    public int m_largeur;
+    public float m_vitesse;
+    public int m_bordure;
+    public List<int> m_grid;
 }

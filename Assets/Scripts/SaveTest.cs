@@ -15,138 +15,138 @@ public class SaveTest : MonoBehaviour
     public Slider Boucle;
     public TextMeshProUGUI savename;
     public TMP_Dropdown dropdownFormat;
-    private string format;
-    SaveJson savejson = new SaveJson();
+    private string _format;
+    SaveJson _savejson = new SaveJson();
 
     public void SaveButton()
     {
         var so = CreateDataObject();
-        savejson.Save(so, format);
-        print("Save");
+        _savejson.Save(so, _format);
     }
 
     public void LoadButton()
     {
-        so = savejson.Load(this, format);
+        so = _savejson.Load(this, _format);
         if (so != null)
         {
             LoadDataObject();
-            print("Load");
         }
     }
 
-    public void changeSaveName()
+    public void ChangeSaveName()
     {
         if (dropdownFormat.value == 0)
         {
-            format = ".txt";
+            _format = ".txt";
         }
         else
         {
-            format = ".png";
+            _format = ".png";
         }
-        savejson.saveName(savename.text, format) ;
+        _savejson.SaveName(savename.text, _format) ;
     }
 
     private SaveObject CreateDataObject()
     {
         so = new SaveObject();
-        so.Hauteur = GridManager.instance.hauteur;
-        so.Largeur = GridManager.instance.largeur;
-        so.Vitesse = GridManager.instance.timer;
-        so.Bordure = GridManager.instance.rule;
+        so.m_hauteur = GridManager.instance.height;
+        so.m_largeur = GridManager.instance.width;
+        so.m_vitesse = GridManager.instance.timer;
+        so.m_bordure = GridManager.instance.rule;
 
-        so.Grid = new List<int>();
+        so.m_grid = new List<int>();
         foreach (var item in GridManager.instance._grid)
         {
             if (item.GetComponent<CellAttributs>().alive)
             {
-                so.Grid.Add(1);
+                so.m_grid.Add(1);
             }
             else
             {
-                so.Grid.Add(0);
+                so.m_grid.Add(0);
             }
         }
         return so;
     }
-    private SaveObject LoadDataObject()
+    private void LoadDataObject()
     {
-        GridManager.instance.hauteur = so.Hauteur;
-        GridManager.instance.largeur = so.Largeur;
-        GridManager.instance.timer = so.Vitesse;
-        GridManager.instance.rule = so.Bordure;
+        GridManager.instance.height = so.m_hauteur;
+        GridManager.instance.width = so.m_largeur;
+        GridManager.instance.timer = so.m_vitesse;
+        GridManager.instance.rule = so.m_bordure;
 
-        Height.value = so.Hauteur;
-        Width.value = so.Largeur;
-        Speed.value = so.Vitesse;
-        Boucle.value = so.Bordure;
+        Height.value = so.m_hauteur;
+        Width.value = so.m_largeur;
+        Speed.value = so.m_vitesse;
+        Boucle.value = so.m_bordure;
 
-        if (so.Bordure == 0) { 
-            so = savejson.Load(this);
-            foreach (Transform Cell in CellContainer.transform)
+        if (so.m_bordure == 0) { 
+            if (so != null)
             {
-                Destroy(Cell.gameObject);
-
-            }
-            GridManager.instance._grid = new GameObject[so.Hauteur+20, so.Largeur + 20];
-            for (int i=0; i<so.Hauteur + 20; i++)
-            {
-                for (int o = 0; o < so.Largeur + 20; o++)
+                foreach (Transform Cell in CellContainer.transform)
                 {
-                    int a = o + ((so.Largeur+20) * i);
-                
-                    GameObject clone = Instantiate(Cell, new Vector3(o, i, 0), Quaternion.identity);
-                    clone.name = (i.ToString() + "," + o.ToString());
-                    clone.transform.SetParent(CellContainer.transform);
-
-                    if (so.Grid[a] == 1)
-                    {
-                        clone.GetComponent<CellAttributs>().alive = true;
-                    }
-                    else
-                    {
-                        clone.GetComponent<CellAttributs>().alive = false;
-                    }
-                    if (o < 10 || i < 10 || o >= so.Largeur + 10 || i >= so.Hauteur + 10)
-                        clone.SetActive(false);
-                    GridManager.instance._grid[i, o] = clone;
+                    Destroy(Cell.gameObject);
                 }
+                GridManager.instance._grid = new GameObject[so.m_hauteur + 19, so.m_largeur + 19];
+                int a = 0;
+                for (int i = 0; i < so.m_hauteur + 19; i++)
+                {
+                    for (int o = 0; o < so.m_largeur + 19; o++)
+                    {
+                        GameObject clone = Instantiate(Cell, new Vector3(o, i, 0), Quaternion.identity);
+                        clone.name = (i.ToString() + "," + o.ToString());
+                        clone.transform.SetParent(CellContainer.transform);                        
 
+                        if (so.m_grid[a] == 1)
+                        {
+                            clone.GetComponent<CellAttributs>().alive = true;
+                        }
+                        else
+                        {
+                            clone.GetComponent<CellAttributs>().alive = false;
+                        }
+
+                        if (o < 19 / 2 || i < 19 / 2 || o >= so.m_largeur + 19 / 2 || i >= so.m_hauteur + 19 / 2)
+                            clone.SetActive(false);
+
+                        GridManager.instance._grid[i, o] = clone;
+                        a++;
+                    }
+                }
             }
         }
         else
         {
-            so = savejson.Load(this);
-            foreach (Transform Cell in CellContainer.transform)
+            if (so != null)
             {
-                Destroy(Cell.gameObject);
-            }
-            GridManager.instance._grid = new GameObject[so.Hauteur , so.Largeur ];
-            for (int i = 0; i < so.Hauteur; i++)
-            {
-                for (int o = 0; o < so.Largeur; o++)
+                foreach (Transform Cell in CellContainer.transform)
                 {
-                    int a = o + (so.Largeur * i);
-
-                    GameObject clone = Instantiate(Cell, new Vector3(o, i, 0), Quaternion.identity);
-                    clone.name = (i.ToString() + "," + o.ToString());
-                    clone.transform.SetParent(CellContainer.transform);
-
-                    if (so.Grid[a] == 1)
-                    {
-                        clone.GetComponent<CellAttributs>().alive = true;
-                    }
-                    else
-                    {
-                        clone.GetComponent<CellAttributs>().alive = false;
-                    }
-                    GridManager.instance._grid[i, o] = clone;
+                    Destroy(Cell.gameObject);
                 }
+                GridManager.instance._grid = new GameObject[so.m_hauteur, so.m_largeur];
+                for (int i = 0; i < so.m_hauteur; i++)
+                {
+                    for (int o = 0; o < so.m_largeur; o++)
+                    {
+                        int a = o + (so.m_largeur * i);
 
-            }
+                        GameObject clone = Instantiate(Cell, new Vector3(o, i, 0), Quaternion.identity);
+                        clone.name = (i.ToString() + "," + o.ToString());
+                        clone.transform.SetParent(CellContainer.transform);
+
+                        if (so.m_grid[a] == 1)
+                        {
+                            clone.GetComponent<CellAttributs>().alive = true;
+                        }
+                        else
+                        {
+                            clone.GetComponent<CellAttributs>().alive = false;
+                        }
+                        GridManager.instance._grid[i, o] = clone;
+                    }
+
+                }
+            } 
         }
-        GridManager.instance.posCam(so.Largeur, so.Hauteur);
-        return so;
     }
 }

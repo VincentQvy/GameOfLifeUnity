@@ -1936,7 +1936,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 612470966}
-  - component: {fileID: 612470965}
   - component: {fileID: 612470967}
   m_Layer: 0
   m_Name: InputManager
@@ -1945,19 +1944,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &612470965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 612470964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 026c0f15f0fafbe4abce7e9aa7bd226d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &612470966
 Transform:
   m_ObjectHideFlags: 0
@@ -5747,7 +5733,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 612470967}
         m_TargetAssemblyTypeName: SaveTest, Assembly-CSharp
-        m_MethodName: changeSaveName
+        m_MethodName: ChangeSaveName
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

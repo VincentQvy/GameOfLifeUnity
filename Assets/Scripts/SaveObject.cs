@@ -10,5 +10,4 @@ public class SaveObject
     public float Vitesse;
     public int Bordure;
     public List<int> Grid;
-
 }

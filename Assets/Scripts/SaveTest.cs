@@ -14,19 +14,21 @@ public class SaveTest : MonoBehaviour
     public Slider Speed;
     public Slider Boucle;
     public TextMeshProUGUI savename;
+    public TMP_Dropdown dropdownFormat;
+    private string format;
+    SaveJson savejson = new SaveJson();
 
     public void SaveButton()
     {
         var so = CreateDataObject();
-        SaveJson.Save(so);
+        savejson.Save(so, format);
         print("Save");
     }
 
     public void LoadButton()
     {
-        so = SaveJson.Load(this);
-        Debug.Log(so);
-        if (so!= null)
+        so = savejson.Load(this, format);
+        if (so != null)
         {
             LoadDataObject();
             print("Load");
@@ -35,7 +37,15 @@ public class SaveTest : MonoBehaviour
 
     public void changeSaveName()
     {
-        SaveJson.saveName(savename.text);
+        if (dropdownFormat.value == 0)
+        {
+            format = ".txt";
+        }
+        else
+        {
+            format = ".png";
+        }
+        savejson.saveName(savename.text, format) ;
     }
 
     private SaveObject CreateDataObject()
@@ -73,7 +83,7 @@ public class SaveTest : MonoBehaviour
         Boucle.value = so.Bordure;
 
         if (so.Bordure == 0) { 
-            so = SaveJson.Load(this);
+            so = savejson.Load(this);
             foreach (Transform Cell in CellContainer.transform)
             {
                 Destroy(Cell.gameObject);
@@ -107,7 +117,7 @@ public class SaveTest : MonoBehaviour
         }
         else
         {
-            so = SaveJson.Load(this);
+            so = savejson.Load(this);
             foreach (Transform Cell in CellContainer.transform)
             {
                 Destroy(Cell.gameObject);

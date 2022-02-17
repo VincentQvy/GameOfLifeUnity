@@ -14,6 +14,7 @@ public class GridManager : MonoBehaviour
     public int hauteur = 5;
     public int largeur = 5;
     public int rule = 0;
+    public int offset = 0;
     public bool checkStart = false;
     public bool checkGen = false;
     public float timer = 1.0f;
@@ -47,6 +48,14 @@ public class GridManager : MonoBehaviour
     public void borderRule()
     {
         rule = (int)GameObject.Find("GameType").GetComponent<Slider>().value;
+        if (rule == 0)
+        {
+            offset = 20;
+        }
+        else
+        {
+            offset = 0;
+        }
     }
 
     public void ChangeHeight()
@@ -64,36 +73,18 @@ public class GridManager : MonoBehaviour
 
     public void posCam(int largeur, int hauteur)
     {
-        if (rule == 1)
+        int cameraSize = 0;
+        if (hauteur < largeur)
         {
-            int cameraSize = 0;
-            if (hauteur < largeur)
-            {
-                cameraSize = largeur;
-            }
-            else
-            {
-                cameraSize = hauteur;
-            }
-            Camera.main.orthographicSize = cameraSize / 2;
-            Vector3 position = new Vector3(0, hauteur / 2 - 0.5f, -10);
-            Camera.main.transform.position = position;
+            cameraSize = largeur;
         }
         else
         {
-            int cameraSize = 0;
-            if (hauteur < largeur)
-            {
-                cameraSize = largeur + 20;
-            }
-            else
-            {
-                cameraSize = hauteur + 20;
-            }
-            Camera.main.orthographicSize = cameraSize / 2;
-            Vector3 position = new Vector3(0, (hauteur + 20) / 2 - 0.5f, -10);
-            Camera.main.transform.position = position;
+            cameraSize = hauteur;
         }
+        Camera.main.orthographicSize = cameraSize / 2;
+        Vector3 position = new Vector3(0 + offset / 2, (hauteur + offset) / 2 - 0.5f, -10);
+        Camera.main.transform.position = position;
     }
 
     public void GenMap()
@@ -104,33 +95,17 @@ public class GridManager : MonoBehaviour
         {
             Destroy(Cell.gameObject);
         }
-        if(rule == 1) { 
-            _grid = new GameObject[hauteur, largeur];
-            for (int y = 0; y < hauteur; y++)
-            {
-                for (int x = 0; x < largeur; x++)
-                {
-                    GameObject clone = Instantiate(Cell, new Vector3(x, y, 0), Quaternion.identity);
-                    clone.name = (y.ToString() + "," + x.ToString());
-                    clone.transform.SetParent(CellContainer.transform);
-                    _grid[y, x] = clone;
-                }
-            }
-        }
-        else
+        _grid = new GameObject[hauteur + offset, largeur + offset];
+        for (int y = 0; y < hauteur + offset; y++)
         {
-            _grid = new GameObject[hauteur + 20, largeur + 20];
-            for (int y = 0; y < hauteur + 20; y++)
+            for (int x = 0; x < largeur + offset; x++)
             {
-                for (int x = 0; x < largeur + 20; x++)
-                {
-                    GameObject clone = Instantiate(Cell, new Vector3(x, y, 0), Quaternion.identity);
-                    clone.name = (y.ToString() + "," + x.ToString());
-                    clone.transform.SetParent(CellContainer.transform);
-                    if (x < 10 || y < 10 || x >= largeur + 10 || y >= hauteur + 10)
-                        clone.SetActive(false);
-                    _grid[y, x] = clone;
-                }
+                GameObject clone = Instantiate(Cell, new Vector3(x, y, 0), Quaternion.identity);
+                clone.name = (y.ToString() + "," + x.ToString());
+                clone.transform.SetParent(CellContainer.transform);
+                if (x < offset / 2 || y < offset / 2 || x >= largeur + offset / 2 || y >= hauteur + offset / 2)
+                    clone.SetActive(false);
+                _grid[y, x] = clone;
             }
         }
     }
@@ -268,100 +243,53 @@ public class GridManager : MonoBehaviour
     }
     void PlayLoop()
     {
-        if (rule == 1) {
-            toChange = new bool[hauteur, largeur];
-            for (int y = 0; y < hauteur; y++)
-            {
-                for (int x = 0; x < largeur; x++)
-                {
-                    toChange[y, x] = _grid[y, x].GetComponent<CellAttributs>().alive;
-                    switch (checkNeighbour(x, y))
-                    {
-                        case 0:
-                            toChange[y, x] = false;
-                            break;
-                        case 1:
-                            toChange[y, x] = false;
-                            break;
-                        case 3:
-                            toChange[y, x] = true;
-                            break;
-                        case 4:
-                            toChange[y, x] = false;
-                            break;
-                        case 5:
-                            toChange[y, x] = false;
-                            break;
-                        case 6:
-                            toChange[y, x] = false;
-                            break;
-                        case 7:
-                            toChange[y, x] = false;
-                            break;
-                        case 8:
-                            toChange[y, x] = false;
-                            break;
-                    }
-                }
-            }
-            for (int y = 0; y < hauteur; y++)
-            {
-                for (int x = 0; x < largeur; x++)
-                {
-                    _grid[y, x].GetComponent<CellAttributs>().alive = toChange[y, x];
-                }
-            }
-        }
-        else
+        toChange = new bool[hauteur + offset, largeur + offset];
+        for (int y = 0; y < hauteur + offset; y++)
         {
-            toChange = new bool[hauteur + 20, largeur + 20];
-            for (int y = 0; y < hauteur +20; y++)
+            for (int x = 0; x < largeur + offset; x++)
             {
-                for (int x = 0; x < largeur+20; x++)
+                toChange[y, x] = _grid[y, x].GetComponent<CellAttributs>().alive;
+                switch (checkNeighbour(x, y))
                 {
-                    toChange[y, x] = _grid[y, x].GetComponent<CellAttributs>().alive;
-                    switch (checkNeighbour(x, y))
-                    {
-                        case 0:
-                            toChange[y, x] = false;
-                            break;
-                        case 1:
-                            toChange[y, x] = false;
-                            break;
-                        case 3:
-                            toChange[y, x] = true;
-                            break;
-                        case 4:
-                            toChange[y, x] = false;
-                            break;
-                        case 5:
-                            toChange[y, x] = false;
-                            break;
-                        case 6:
-                            toChange[y, x] = false;
-                            break;
-                        case 7:
-                            toChange[y, x] = false;
-                            break;
-                        case 8:
-                            toChange[y, x] = false;
-                            break;
-                    }
-                }
-            }
-            for (int y = 0; y < hauteur+20; y++)
-            {
-                for (int x = 0; x < largeur+20; x++)
-                {
-                    _grid[y, x].GetComponent<CellAttributs>().alive = toChange[y, x];
+                    case 0:
+                        toChange[y, x] = false;
+                        break;
+                    case 1:
+                        toChange[y, x] = false;
+                        break;
+                    case 3:
+                        toChange[y, x] = true;
+                        break;
+                    case 4:
+                        toChange[y, x] = false;
+                        break;
+                    case 5:
+                        toChange[y, x] = false;
+                        break;
+                    case 6:
+                        toChange[y, x] = false;
+                        break;
+                    case 7:
+                        toChange[y, x] = false;
+                        break;
+                    case 8:
+                        toChange[y, x] = false;
+                        break;
                 }
             }
         }
+        for (int y = 0; y < hauteur + offset; y++)
+        {
+            for (int x = 0; x < largeur + offset; x++)
+            {
+                _grid[y, x].GetComponent<CellAttributs>().alive = toChange[y, x];
+            }
+        }
+
     }
 
     void Update()
     {
-
         Vector3 worldPosition;
         if (checkGen)
         {
@@ -370,7 +298,10 @@ public class GridManager : MonoBehaviour
                 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)Mathf.Floor(worldPosition.x + 0.5f);
                 int y = (int)Mathf.Floor(worldPosition.y + 0.5f);
-                _grid[y, x].GetComponent<CellAttributs>().alive = !_grid[y, x].GetComponent<CellAttributs>().alive;
+                if (x >= 0 && x < largeur + offset && y >= 0 && y < hauteur + offset)
+                {
+                    _grid[y, x].GetComponent<CellAttributs>().alive = !_grid[y, x].GetComponent<CellAttributs>().alive;
+                }
             }
             if (checkStart)
             {
